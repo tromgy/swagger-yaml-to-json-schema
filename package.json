@@ -1,0 +1,43 @@
+{
+  "name": "ytoj",
+  "version": "1.0.0",
+  "description": "Generates JSON schema from Swagger YAML API specifications",
+  "main": "ytoj",
+  "scripts": {
+    "lint": "eslint bin/*.js && eslint test/*.js",
+    "tape": "tape test/tests.js | colortape",
+    "test": "npm run lint && npm run tape",
+    "build": "npm ci && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tromgy/swagger-yaml-to-json-schema.git"
+  },
+  "keywords": [
+    "Swagger",
+    "YAML",
+    "JSON schema"
+  ],
+  "author": "Tromgy (tromgy@yahoo.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tromgy/swagger-yaml-to-json-schema/issues"
+  },
+  "homepage": "https://github.com/tromgy/swagger-yaml-to-json-schema#readme",
+  "dependencies": {
+    "colors": "^1.3.2",
+    "js-yaml": "^3.12.0",
+    "json-schema-ref-parser": "^6.0.2",
+    "lodash": "^4.17.11",
+    "promptly": "^3.0.3"
+  },
+  "devDependencies": {
+    "colortape": "^0.1.2",
+    "eslint": "^5.9.0",
+    "tape": "^4.9.1",
+    "tape-catch": "^1.0.6"
+  },
+  "bin": {
+    "ytoj": "bin/ytoj.js"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/tromgy/swagger-yaml-to-json-schema",
+  "title": "Swagger Petstore",
+  "description": "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification",
+  "version": "1.0.0",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "The version of this schema that will be used to validate JSON data"
+    },
+    "arrayOfPet": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Pet"
+      },
+      "description": "pet response"
+    },
+    "errorModel": {
+      "$ref": "#/definitions/ErrorModel",
+      "description": "unexpected error"
+    },
+    "newPet": {
+      "$ref": "#/definitions/NewPet",
+      "description": "Pet to add to the store"
+    },
+    "pet": {
+      "$ref": "#/definitions/Pet",
+      "description": "pet response"
+    }
+  },
+  "required": [
+    "schemaVersion"
+  ],
+  "definitions": {
+    "Pet": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/NewPet"
+        },
+        {
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      ]
+    },
+    "NewPet": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorModel": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
