@@ -2,6 +2,12 @@
 
 This CLI tool can be used to generate JSON schema from Swagger YAML file.
 
+## Pre-requisites
+
+Node.js version 7.0 (in theory) or newer. Tested with 8.12.0, 10.13.0, 10.14.1
+
+**npm** version 6.1.0 or newer. Tested with 6.1.0 and 6.4.1
+
 ## Installation
 
 If you want the tool to be available globally:

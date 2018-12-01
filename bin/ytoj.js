@@ -9,7 +9,7 @@ const yaml = require('js-yaml');
 const refParser = require('json-schema-ref-parser');
 const path = require('path');
 const promptly = require('promptly');
-require('url');
+const URL = require('url').URL;
 
 // Validators for input parameters (used by promptly and when reading config file)
 const yamlFileValidator = function (value) {
