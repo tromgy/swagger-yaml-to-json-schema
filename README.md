@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/tromgy/swagger-yaml-to-json-schema.png?branch=master)](https://travis-ci.org/tromgy/swagger-yaml-to-json-schema)
 
+[![Known Vulnerabilities](https://snyk.io/test/github/tromgy/swagger-yaml-to-json-schema/badge.svg?targetFile=package.json)](https://snyk.io/test/github/tromgy/swagger-yaml-to-json-schema?targetFile=package.json)
+
 This CLI tool can be used to generate JSON schema from Swagger YAML file.
 
 ## Pre-requisites
