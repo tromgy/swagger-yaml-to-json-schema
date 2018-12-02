@@ -1,5 +1,7 @@
 # swagger-yaml-to-json-schema (ytoj)
 
+[![Build Status](https://travis-ci.org/tromgy/swagger-yaml-to-json-schema.png?branch=master)](https://travis-ci.org/tromgy/swagger-yaml-to-json-schema)
+
 This CLI tool can be used to generate JSON schema from Swagger YAML file.
 
 ## Pre-requisites
