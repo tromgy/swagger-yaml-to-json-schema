@@ -105,6 +105,29 @@ test('Non-existent YAML File', function (t) {
   });
 });
 
+test('Invalid YAML File', function (t) {
+  t.plan(1);
+
+  const invalidAPI = '.travis.yml';
+
+  setup([{ key: 'yaml', value: invalidAPI }]);
+
+  // Expect with colors!
+  const expected = `\u001b[31mCould not get configuration: Error: \u001b[31mInput file ${invalidAPI} does not appear to be a Swagger 2 or OpenAPI 3 specification.\u001b[39m[39m\n`;
+
+  // Start our app as a child process
+  cp.execFile('node', [appCmd], (error, childOut, childErr) => {
+    if (error) {
+      throw error; // Something really unexpected happened
+    }
+
+    const actual = childErr.toString();
+    t.equal(actual, expected, 'Should see error when YAML file does not exist.');
+
+    teardown();
+  });
+});
+
 test('Output to Current Working Directory', function (t) {
   t.plan(2);
 
@@ -161,7 +184,6 @@ test('Non-existent Output Path', function (t) {
     teardown(configuration);
   });
 });
-
 
 test('Existing Output File', function (t) {
   t.plan(2);

@@ -4,7 +4,7 @@
 
 [![Known Vulnerabilities](https://snyk.io/test/github/tromgy/swagger-yaml-to-json-schema/badge.svg?targetFile=package.json)](https://snyk.io/test/github/tromgy/swagger-yaml-to-json-schema?targetFile=package.json)
 
-This CLI tool can be used to generate JSON schema from Swagger YAML file.
+This CLI tool can be used to generate JSON schema from Swagger version 2 or 3 (OpenAPI) YAML file.
 
 ## Pre-requisites
 
@@ -43,11 +43,11 @@ or (for local installation)
 the tool will run interactively collecting some information:
 
 ```
-Generate JSON schema from Swagger YAML document.
+Generate JSON schema from Swagger or Open API YAML document.
 
 Swagger YAML file:  sample/petstore-simple.yaml
 Output JSON schema:  schema/petstore-simple.json
-$schema: (http://json-schema.org/draft-07/schema#)  
+$schema: (http://json-schema.org/draft-07/schema#)
 $id:  http://my.schema.com
 Resolve $refs? (n) n
 Allow additionalProperties? (n) n

@@ -11,10 +11,88 @@ const path = require('path');
 const promptly = require('promptly');
 const URL = require('url').URL;
 
+let swaggerObj = null;
+let default$id = '';
+
+// This initialization is to insure that these two keywords
+// appear first in the resulting file -- it is only for aesthetic purposes
+let schema = {
+  $schema: null,
+  $id: null,
+};
+
+// Input file reader and validator
+const ingestYAML = function (yamlFile) {
+  // Read YAML
+  const swaggerYAML = fs.readFileSync(yamlFile).toString();
+
+  // Convert to JSON
+  const swaggerJSON = yaml.safeLoad(swaggerYAML);
+
+  // Determine the spec version (supported Swagger 2.* or Open API 3.*)
+  const swaggerVersion = swaggerJSON.swagger;
+  const openAPIVersion = swaggerJSON.openapi;
+
+  if (swaggerVersion) {
+    if (swaggerVersion.toString().startsWith('2')) {
+      return swaggerJSON;
+    } else {
+      return null;
+    }
+  } else if (openAPIVersion) {
+    if (openAPIVersion.toString().startsWith('3')) {
+      return swaggerJSON;
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+};
+
 // Validators for input parameters (used by promptly and when reading config file)
 const yamlFileValidator = function (value) {
   if (fs.existsSync(value)) {
-    return value;
+    // Check that it appears to be a Swagger/Open API file
+    swaggerObj = ingestYAML(value);
+
+    if (swaggerObj) {
+      // Get the metadata
+      if (swaggerObj.info) {
+        // Title is required
+        if (swaggerObj.info.title) {
+          schema.title = swaggerObj.info.title;
+        } else {
+          throw new Error('The title is missing in the Swagger YAML'.red);
+        }
+
+        // Description is not required
+        if (swaggerObj.info.description) {
+          schema.description = swaggerObj.info.description;
+        } else {
+          console.log('The description is missing in the Swagger YAML'.yellow);
+        }
+
+        // Version is required
+        if (swaggerObj.info.version) {
+          schema.version = swaggerObj.info.version;
+        } else {
+          throw new Error('The version is missing in the Swagger YAML'.red);
+        }
+
+        // Try to guess the URL to use as the default schema $id from the license spec
+        if (swaggerObj.info.license) {
+          default$id = swaggerObj.info.license.url ? swaggerObj.info.license.url : '';
+        }
+
+      } else {
+        throw new Error('The info object is missing in the Swagger YAML'.red);
+      }
+
+      return value;
+    } else {
+      throw new Error(`Input file ${value} does not appear to be a Swagger 2 or OpenAPI 3 specification.`.red);
+    }
   }
   throw new Error(`Input file ${value} is not found.`.red);
 };
@@ -68,14 +146,23 @@ function addSchemaProps(swagger, schemaProps) {
       let propPath = '';
       let propName = '';
 
+      if (container.name) {
+        propName = container.name;
+      }
+
       if (container.schema.type) {
         if (container.schema.type === 'array') {
           propPath = container.schema.items.$ref;
-          propName = 'arrayOf'.concat(propPath.slice(propPath.lastIndexOf('/') + 1));
+
+          if (!propName) {
+            propName = 'arrayOf'.concat(propPath.slice(propPath.lastIndexOf('/') + 1));
+          }
         } else {
-          // For primitive types we can't infer the property name,
-          // so just use the unique number with the type name
-          propName = `${container.schema.type}-${++primitiveId}`;
+          // For primitive types if we can't find the property name,
+          // use the unique number with the type name
+          if (!propName) {
+            propName = `${container.schema.type}-${++primitiveId}`;
+          }
         }
       } else {
         propPath = container.schema.$ref;
@@ -94,16 +181,15 @@ function addSchemaProps(swagger, schemaProps) {
 }
 
 // Main
-const ytoj = async function () {
+(async function () {
   const configFile = './ytoj.json';
   let configuration = {};
-  let schema = {};
 
   try {
     // If no configuration file is found, work interactively, otherwise silently
     if (!fs.existsSync(configFile)) {
       do {
-        console.log('\nGenerate JSON schema from Swagger YAML document.\n');
+        console.log('\nGenerate JSON schema from Swagger or Open API YAML document.\n');
 
         configuration.yaml = await promptly.prompt('Swagger YAML file: '.cyan, { validator: yamlFileValidator });
         configuration.json = await promptly.prompt('Output JSON schema: '.cyan, { validator: jsonFileValidator });
@@ -112,9 +198,9 @@ const ytoj = async function () {
             default: 'http://json-schema.org/draft-07/schema#',
             validator: $schemaValidator,
           });
-        configuration.id = await promptly.prompt('$id: '.cyan,
+        configuration.id = await promptly.prompt(`$id: (${default$id})`.cyan,
           {
-            default: '',
+            default: default$id,
             validator: $idValidator,
           });
         configuration.resolveRefs = await promptly.confirm('Resolve $refs? (n)'.cyan, { default: 'n' });
@@ -127,9 +213,9 @@ const ytoj = async function () {
         console.log('\t$id:                  '.green.concat(configuration.id));
         console.log('\tResolve $refs:        '.green.concat(configuration.resolveRefs));
         console.log('\tadditionalProperties: '.green.concat(configuration.additionalProperties));
-      } while (!await promptly.confirm('\nDoes everything look good? '.cyan));
+      } while (!await promptly.confirm('\nDoes everything look good (y)? '.cyan, { default: 'y' }));
 
-      if (await promptly.confirm('Save these settings in ytoj.json? '.cyan)) {
+      if (await promptly.confirm('Save these settings in ytoj.json (y)?'.cyan, { default: 'y' })) {
         try {
           fs.writeFile(configFile, JSON.stringify(configuration, null, 2), (err) => {
             if (err) {
@@ -158,49 +244,25 @@ const ytoj = async function () {
       }
     }
 
-    // Read YAML
-    const swaggerYAML = fs.readFileSync(configuration.yaml).toString();
+    // Extract schema
+    let schemaPart = null;
 
-    // Convert to JSON
-    const swaggerJSON = yaml.safeLoad(swaggerYAML);
-
-    // Extract definitions
-    const schemaPart = swaggerJSON.definitions;
+    // At this point we can be sure that it's either Swagger 2 or OpenAPI 3
+    // as it already has been validated
+    if (swaggerObj.swagger) {                 // Swagger 2
+      schemaPart = swaggerObj.definitions;
+    } else {                                  // OpenAPI 3
+      schemaPart = swaggerObj.components.schemas;
+    }
 
     // Create JSON schema
     schema.$schema = configuration.schema;
 
-    // If no id is given, don't add it to the schema -- empty strings not allowed
+    // If no id is given, remove it from the schema -- empty strings not allowed
     if (configuration.id) {
       schema.$id = configuration.id;
-    }
-
-    // Get the metadata
-    if (swaggerJSON.info) {
-      // Title is required
-      if (swaggerJSON.info.title) {
-        schema.title = swaggerJSON.info.title;
-      } else {
-        console.error('The title is missing in the Swagger YAML'.red);
-        return;
-      }
-
-      // Description is not required
-      if (swaggerJSON.info.description) {
-        schema.description = swaggerJSON.info.description;
-      } else {
-        console.error('The description is missing in the Swagger YAML'.yellow);
-      }
-
-      // Version is required
-      if (swaggerJSON.info.version) {
-        schema.version = swaggerJSON.info.version;
-      } else {
-        console.error('The version is missing in the Swagger YAML'.red);
-      }
     } else {
-      console.error('The info object is missing in the Swagger YAML'.red);
-      return;
+      delete schema.$id;
     }
 
     schema.additionalProperties = configuration.additionalProperties;
@@ -215,10 +277,19 @@ const ytoj = async function () {
     schema.required = ['schemaVersion'];
 
     // Find "schema"s in the "paths" -- they will go to the properties key
-    addSchemaProps(swaggerJSON, schema.properties);
+    addSchemaProps(swaggerObj, schema.properties);
 
     // Add all entity defintions
     schema.definitions = schemaPart;
+
+    // If this is an OpenAPI 3 spec, we need to change all $refs from
+    // #/components/schemas to #/definitions
+    // this we can do by simply doing text search and replace
+    if (swaggerObj.openapi) {
+      let oldSchemaText = JSON.stringify(schema);
+      let newSchemaText = oldSchemaText.replace(new RegExp('#/components/schemas', 'g'), '#/definitions');
+      schema = JSON.parse(newSchemaText);
+    }
 
     // Resolve $refs if specified
     if (configuration.resolveRefs) {
@@ -245,7 +316,5 @@ const ytoj = async function () {
   } catch (err) {
     console.error('\n'.concat(err.message.red));
   }
-};
-
-// Run it
-ytoj();
+}
+)();
