@@ -43,7 +43,7 @@ or (for local installation)
 the tool will run interactively collecting some information:
 
 ```
-Generate JSON schema from Swagger or Open API YAML document.
+Generate JSON schema from Swagger or OpenAPI YAML document.
 
 Swagger YAML file:  sample/petstore-simple.yaml
 Output JSON schema:  schema/petstore-simple.json

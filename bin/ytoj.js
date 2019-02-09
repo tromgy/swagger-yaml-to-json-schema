@@ -29,7 +29,7 @@ const ingestYAML = function (yamlFile) {
   // Convert to JSON
   const swaggerJSON = yaml.safeLoad(swaggerYAML);
 
-  // Determine the spec version (supported Swagger 2.* or Open API 3.*)
+  // Determine the spec version (supported Swagger 2.* or OpenAPI 3.*)
   const swaggerVersion = swaggerJSON.swagger;
   const openAPIVersion = swaggerJSON.openapi;
 
@@ -53,7 +53,7 @@ const ingestYAML = function (yamlFile) {
 // Validators for input parameters (used by promptly and when reading config file)
 const yamlFileValidator = function (value) {
   if (fs.existsSync(value)) {
-    // Check that it appears to be a Swagger/Open API file
+    // Check that it appears to be a Swagger/OpenAPI file
     swaggerObj = ingestYAML(value);
 
     if (swaggerObj) {
@@ -189,7 +189,7 @@ function addSchemaProps(swagger, schemaProps) {
     // If no configuration file is found, work interactively, otherwise silently
     if (!fs.existsSync(configFile)) {
       do {
-        console.log('\nGenerate JSON schema from Swagger or Open API YAML document.\n');
+        console.log('\nGenerate JSON schema from Swagger or OpenAPI YAML document.\n');
 
         configuration.yaml = await promptly.prompt('Swagger YAML file: '.cyan, { validator: yamlFileValidator });
         configuration.json = await promptly.prompt('Output JSON schema: '.cyan, { validator: jsonFileValidator });
