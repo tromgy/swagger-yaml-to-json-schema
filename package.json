@@ -5,9 +5,16 @@
   "main": "ytoj",
   "scripts": {
     "lint": "eslint bin/*.js && eslint test/*.js",
+    "lint-md": "remark .",
     "tape": "tape test/tests.js | colortape",
     "test": "npm run lint && npm run tape",
     "build": "npm ci && npm run test"
+  },
+  "remarkConfig": {
+    "plugins": [
+      "remark-preset-lint-recommended",
+      "lint-fenced-code-flag"
+    ]
   },
   "repository": {
     "type": "git",
@@ -30,11 +37,15 @@
     "js-yaml": "^3.12.0",
     "json-schema-ref-parser": "^6.0.2",
     "lodash": "^4.17.11",
-    "promptly": "^3.0.3"
+    "promptly": "^3.0.3",
+    "remark-lint-fenced-code-flag": "^1.0.2"
   },
   "devDependencies": {
     "colortape": "^0.1.2",
     "eslint": "^5.9.0",
+    "remark-cli": "^6.0.1",
+    "remark-lint": "^6.0.4",
+    "remark-preset-lint-recommended": "^3.0.2",
     "tape": "^4.9.1",
     "tape-catch": "^1.0.6"
   },
