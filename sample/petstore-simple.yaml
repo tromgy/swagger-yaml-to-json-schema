@@ -135,6 +135,9 @@ definitions:
         type: string
       tag:
         type: string
+      microchip:
+        type: string
+        nullable: true
   ErrorModel:
     type: object
     required:

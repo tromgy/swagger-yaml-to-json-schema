@@ -125,16 +125,17 @@ const $idValidator = function (value) {
   return value;
 };
 
+// Function to find all nested sub-objects by the key
+// Credit: Bergi (https://stackoverflow.com/users/1048572/bergi)
+// Borrowed from: https://stackoverflow.com/questions/15642494/find-property-by-name-in-a-deep-object
+function findInNested(obj, key) {
+  if (_.has(obj, key)) return [obj]; // array of containing objects
+
+  return _.flatten(_.map(obj, v => (typeof v === 'object' ? findInNested(v, key) : [])), true);
+}
+
 // Generate "properties" from Swagger paths
 function addSchemaProps(swagger, schemaProps) {
-  // Function to find all nested sub-objects by the key
-  // Credit: Bergi (https://stackoverflow.com/users/1048572/bergi)
-  // Borrowed from: https://stackoverflow.com/questions/15642494/find-property-by-name-in-a-deep-object
-  function findInNested(obj, key) {
-    if (_.has(obj, key)) return [obj]; // array of containing objects
-
-    return _.flatten(_.map(obj, v => (typeof v === 'object' ? findInNested(v, key) : [])), true);
-  }
 
   try {
     // Find all "schema" sub-objects in Swagger JSON
@@ -177,6 +178,16 @@ function addSchemaProps(swagger, schemaProps) {
     }
   } catch (err) {
     console.error(`Could not parse Swagger paths: ${err}`.red);
+  }
+}
+
+// Convert Swagger "nullable" to "type": "null" in JSON schema
+function convertNullables(schemaObj) {
+  const withNullables = findInNested(schemaObj, 'nullable');
+
+  for (let item of withNullables) {
+    delete item.nullable;
+    item.type = [item.type, 'null'];
   }
 }
 
@@ -281,6 +292,9 @@ function addSchemaProps(swagger, schemaProps) {
 
     // Add all entity defintions
     schema.definitions = schemaPart;
+
+    // Process nullable types
+    convertNullables(schema.definitions);
 
     // If this is an OpenAPI 3 spec, we need to change all $refs from
     // #/components/schemas to #/definitions

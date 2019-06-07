@@ -64,6 +64,12 @@
         },
         "tag": {
           "type": "string"
+        },
+        "microchip": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },

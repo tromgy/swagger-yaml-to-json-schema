@@ -122,7 +122,7 @@ test('Invalid YAML File', function (t) {
     }
 
     const actual = childErr.toString();
-    t.equal(actual, expected, 'Should see error when YAML file does not exist.');
+    t.equal(actual, expected, 'Should see error when YAML file is invalid.');
 
     teardown();
   });
