@@ -12,3 +12,21 @@ patch:
         patched: '2019-07-04T01:26:41.075Z'
     - eslint > table > lodash:
         patched: '2019-07-04T01:26:41.075Z'
+    - snyk > lodash:
+        patched: '2019-08-26T19:13:59.939Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2019-08-26T19:13:59.939Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2019-08-26T19:13:59.939Z'
+    - snyk > inquirer > lodash:
+        patched: '2019-08-26T19:13:59.939Z'
+    - snyk > snyk-config > lodash:
+        patched: '2019-08-26T19:13:59.939Z'
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2019-08-26T19:13:59.939Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2019-08-26T19:13:59.939Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2019-08-26T19:13:59.939Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2019-08-26T19:13:59.939Z'

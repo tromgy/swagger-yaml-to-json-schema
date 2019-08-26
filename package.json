@@ -41,7 +41,7 @@
     "lodash": "^4.17.11",
     "promptly": "^3.0.3",
     "remark-lint-fenced-code-flag": "^1.0.2",
-    "snyk": "^1.189.0"
+    "snyk": "^1.220.0"
   },
   "devDependencies": {
     "colortape": "^0.1.2",
