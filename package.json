@@ -8,7 +8,9 @@
     "lint-md": "remark .",
     "tape": "tape test/tests.js | colortape",
     "test": "npm run lint && npm run tape",
-    "build": "npm ci && npm run test"
+    "build": "npm ci && npm run test",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "remarkConfig": {
     "plugins": [
@@ -38,7 +40,8 @@
     "json-schema-ref-parser": "^6.0.2",
     "lodash": "^4.17.11",
     "promptly": "^3.0.3",
-    "remark-lint-fenced-code-flag": "^1.0.2"
+    "remark-lint-fenced-code-flag": "^1.0.2",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "colortape": "^0.1.2",
@@ -51,5 +54,6 @@
   },
   "bin": {
     "ytoj": "bin/ytoj.js"
-  }
+  },
+  "snyk": true
 }
