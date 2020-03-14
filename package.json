@@ -39,16 +39,16 @@
     "js-yaml": "^3.13.1",
     "json-schema-ref-parser": "^6.0.2",
     "lodash": "^4.17.15",
-    "promptly": "^3.0.3",
-    "remark-lint-fenced-code-flag": "^1.0.2",
-    "snyk": "^1.290.1"
+    "promptly": "^3.0.3"
   },
   "devDependencies": {
     "colortape": "^0.1.2",
     "eslint": "^6.2.2",
     "remark-cli": "^7.0.0",
     "remark-lint": "^6.0.4",
+    "remark-lint-fenced-code-flag": "^1.0.3",
     "remark-preset-lint-recommended": "^3.0.2",
+    "snyk": "^1.298.1",
     "tape": "^4.9.1",
     "tape-catch": "^1.0.6"
   },
