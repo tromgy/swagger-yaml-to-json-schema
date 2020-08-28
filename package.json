@@ -38,7 +38,7 @@
     "colors": "^1.3.2",
     "js-yaml": "^3.13.1",
     "json-schema-ref-parser": "^6.0.2",
-    "lodash": "^4.17.16",
+    "lodash": "^4.17.17",
     "promptly": "^3.0.3"
   },
   "devDependencies": {
