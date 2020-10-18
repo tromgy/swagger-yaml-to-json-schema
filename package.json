@@ -1,11 +1,10 @@
 {
   "name": "ytoj",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Generates JSON schema from Swagger/Open API YAML specifications",
   "main": "ytoj",
   "scripts": {
     "lint": "eslint bin/*.js && eslint test/*.js",
-    "lint-md": "remark .",
     "tape": "tape test/tests.js | colortape",
     "test": "npm run lint && npm run tape",
     "build": "npm ci && npm run test",
@@ -45,10 +44,6 @@
   "devDependencies": {
     "colortape": "^0.1.2",
     "eslint": "^6.2.2",
-    "remark-cli": "^7.0.0",
-    "remark-lint": "^6.0.4",
-    "remark-lint-fenced-code-flag": "^1.0.3",
-    "remark-preset-lint-recommended": "^3.0.2",
     "snyk": "^1.316.1",
     "tape": "^4.9.1",
     "tape-catch": "^1.0.6"

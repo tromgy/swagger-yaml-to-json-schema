@@ -13,6 +13,6 @@
     "no-console": "off",
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
-    "comma-dangle": ["error", "always-multiline"]
+    "comma-dangle": ["error", "only-multiline"]
   }
 }

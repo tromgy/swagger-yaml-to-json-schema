@@ -36,10 +36,14 @@ const validators = require('../lib/validators');
           { default: 'n' }
         );
         configuration.indent = parseInt(
-          await promptly.prompt('Indent size in the output JSON file (2):'.cyan, {
-            default: '2',
-            validator: validators.indent,
-          })
+          await promptly.prompt(
+            'Indent size in the output JSON file (2):'.cyan,
+            {
+              default: '2',
+              validator: validators.indent,
+            },
+            10
+          )
         );
 
         console.log('');
