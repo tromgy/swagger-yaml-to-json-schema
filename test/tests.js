@@ -5,11 +5,15 @@ const fs = require('fs');
 const path = require('path');
 const test = require('tape-catch');
 
+const api = require('..');
+
 const appCmd = 'bin/ytoj.js';
 const configFile = 'ytoj.json';
 let configuration = {};
 
-const setup = function (fixtures) {
+// #region CLI tests
+
+function setup(fixtures) {
   // Default configuration
   configuration = {
     yaml: '',
@@ -21,19 +25,19 @@ const setup = function (fixtures) {
   };
 
   // Update configuration with the specific test fixture
-  fixtures.forEach(fixture => {
+  fixtures.forEach((fixture) => {
     configuration[fixture.key] = fixture.value;
   });
 
   // Write configuration
   fs.writeFileSync(configFile, JSON.stringify(configuration));
-};
+}
 
-const setup_invalid_config = function () {
+function setup_invalid_config() {
   fs.writeFileSync(configFile, 'At vero eos et accusamus et iusto odio dignissimos ducimus');
-};
+}
 
-const teardown = function (config) {
+function teardown(config) {
   if (config) {
     // Delete the output file, if it exists
     // and remove the output directory
@@ -54,14 +58,14 @@ const teardown = function (config) {
   if (fs.existsSync(configFile)) {
     fs.unlinkSync(configFile);
   }
-};
+}
 
 // Make sure the teardown happens even if there's an exception in the test
 // (caught by tape-catch and reported as test failure)
 // "Normal" failures should result in teardown at the end of the test anyway
 test.onFailure(teardown);
 
-test('Invalid Configuration', function (t) {
+test('Invalid Configuration', (t) => {
   t.plan(1);
 
   setup_invalid_config();
@@ -82,7 +86,7 @@ test('Invalid Configuration', function (t) {
   });
 });
 
-test('Non-existent YAML File', function (t) {
+test('Non-existent YAML File', (t) => {
   t.plan(1);
 
   const existMeNot = 'never.yaml';
@@ -105,7 +109,7 @@ test('Non-existent YAML File', function (t) {
   });
 });
 
-test('Invalid YAML File', function (t) {
+test('Invalid YAML File', (t) => {
   t.plan(1);
 
   const invalidAPI = '.travis.yml';
@@ -128,7 +132,7 @@ test('Invalid YAML File', function (t) {
   });
 });
 
-test('Output to Current Working Directory', function (t) {
+test('Output to Current Working Directory', (t) => {
   t.plan(2);
 
   const input = 'sample/petstore-simple.yaml';
@@ -155,7 +159,7 @@ test('Output to Current Working Directory', function (t) {
   });
 });
 
-test('Non-existent Output Path', function (t) {
+test('Non-existent Output Path', (t) => {
   t.plan(3);
 
   const input = 'sample/petstore-simple.yaml';
@@ -185,7 +189,7 @@ test('Non-existent Output Path', function (t) {
   });
 });
 
-test('Existing Output File', function (t) {
+test('Existing Output File', (t) => {
   t.plan(2);
 
   const originalContent = 'Lorem ipsum dolor sit amet';
@@ -218,7 +222,7 @@ test('Existing Output File', function (t) {
   });
 });
 
-test('Invalid $schema', function (t) {
+test('Invalid $schema', (t) => {
   t.plan(1);
 
   const input = 'sample/petstore-simple.yaml';
@@ -244,7 +248,7 @@ test('Invalid $schema', function (t) {
   });
 });
 
-test('Invalid $id', function (t) {
+test('Invalid $id', (t) => {
   t.plan(1);
 
   const input = 'sample/petstore-simple.yaml';
@@ -270,7 +274,7 @@ test('Invalid $id', function (t) {
   });
 });
 
-test('Generate Schema', function (t) {
+test('Generate Schema', (t) => {
   t.plan(2);
 
   const input = 'sample/petstore-simple.yaml';
@@ -293,7 +297,7 @@ test('Generate Schema', function (t) {
     const actual = childErr.toString();
     t.equal(actual, expected, 'Should see no errors.');
 
-    // Compare generated schema to known "good" schema validated by https://www.jsonschemavalidator.net
+    // Compare generated schema to the known "good" schema validated by https://www.jsonschemavalidator.net
     const standardSchema = JSON.parse(fs.readFileSync('sample/petstore-simple-schema.json'));
     const generatedSchema = JSON.parse(fs.readFileSync(output));
     t.deepEqual(generatedSchema, standardSchema, 'Generated schema should be the same as known "good" schema.');
@@ -302,7 +306,7 @@ test('Generate Schema', function (t) {
   });
 });
 
-test('Generate Schema: additionalProperties === true', function (t) {
+test('Generate Schema: additionalProperties === true', (t) => {
   t.plan(2);
 
   const input = 'sample/petstore-simple.yaml';
@@ -333,7 +337,7 @@ test('Generate Schema: additionalProperties === true', function (t) {
   });
 });
 
-test('Generate Schema: resolve $refs', function (t) {
+test('Generate Schema: resolve $refs', (t) => {
   t.plan(2);
 
   const input = 'sample/petstore-simple.yaml';
@@ -364,3 +368,159 @@ test('Generate Schema: resolve $refs', function (t) {
     teardown(configuration);
   });
 });
+
+// #endregion CLI tests
+
+// #region API tests
+
+test('API Invalid Options - invalid schema id', async (t) => {
+  try {
+    await api.ytoj('does not matter', { id: 'my schema' });
+
+    t.fail('The API did not throw an exception on invalid options.'.red);
+    t.end();
+  } catch (e) {
+    t.plan(2);
+
+    t.equal(e.name, 'TypeError', 'Should throw "TypeError".');
+    t.equal(
+      e.message,
+      'Invalid schema id - must be a URL.',
+      'The exception should have the error message indicating that the schema id must be a URL.'
+    );
+  }
+});
+
+test('API Invalid Input - not a string', async (t) => {
+  const invalidInput = { a: 1 };
+
+  try {
+    await api.ytoj(invalidInput);
+
+    t.fail('The API did not throw an exception on invalid input.'.red);
+    t.end();
+  } catch (e) {
+    t.plan(2);
+
+    t.equal(e.name, 'TypeError', 'Should throw "TypeError".');
+    t.equal(
+      e.message,
+      'Expected the input to be a string.',
+      'The exception should have the error message indicating expected input.'
+    );
+  }
+});
+
+test('API Invalid Input', async (t) => {
+  const invalidInput = 'Eros in cursus turpis massa.';
+
+  try {
+    await api.ytoj(invalidInput);
+
+    t.fail('The API did not throw an exception on invalid input.'.red);
+    t.end();
+  } catch (e) {
+    t.plan(2);
+
+    t.equal(e.name, 'TypeError', 'Should throw "TypeError".');
+    t.equal(
+      e.message,
+      'Cannot convert input to JSON.',
+      'The exception should have the error message indicating expected input.'
+    );
+  }
+});
+
+test('API Invalid Input - missing info', async (t) => {
+  const inputFile = 'sample/petstore-simple.yaml';
+
+  const input = fs.readFileSync(inputFile).toString();
+
+  // Remove description
+  const badInput = input.replace(/^info[\s\S]*?MIT(\r\n|\n|\r)/gm, '');
+
+  try {
+    await api.ytoj(badInput);
+
+    t.fail('The API did not throw an exception on invalid input.'.red);
+    t.end();
+  } catch (e) {
+    t.plan(2);
+
+    t.equal(e.name, 'TypeError', 'Should throw "TypeError".');
+    t.equal(
+      e.message,
+      'The info object is missing in the Swagger YAML.',
+      'The exception should have the error message indicating that the info is missing.'
+    );
+  }
+});
+
+test('API Invalid Input - missing title', async (t) => {
+  const inputFile = 'sample/petstore-simple.yaml';
+
+  const input = fs.readFileSync(inputFile).toString();
+
+  // Remove description
+  const badInput = input.replace(/.*title.*(\r\n|\n|\r)/g, '');
+
+  try {
+    await api.ytoj(badInput);
+
+    t.fail('The API did not throw an exception on invalid input.'.red);
+    t.end();
+  } catch (e) {
+    t.plan(2);
+
+    t.equal(e.name, 'TypeError', 'Should throw "TypeError".');
+    t.equal(
+      e.message,
+      'The title is missing in the Swagger YAML.',
+      'The exception should have the error message indicating that the title is missing.'
+    );
+  }
+});
+
+test('API Invalid Input - missing version', async (t) => {
+  const inputFile = 'sample/petstore-simple.yaml';
+
+  const input = fs.readFileSync(inputFile).toString();
+
+  // Remove description
+  const badInput = input.replace(/.*version.*(\r\n|\n|\r)/g, '');
+
+  try {
+    await api.ytoj(badInput);
+
+    t.fail('The API did not throw an exception on invalid input.'.red);
+    t.end();
+  } catch (e) {
+    t.plan(2);
+
+    t.equal(e.name, 'TypeError', 'Should throw "TypeError".');
+    t.equal(
+      e.message,
+      'The version is missing in the Swagger YAML.',
+      'The exception should have the error message indicating that the version is missing.'
+    );
+  }
+});
+
+test('API Happy Path', async (t) => {
+  t.plan(1);
+
+  const inputFile = 'sample/petstore-simple.yaml';
+
+  const input = fs.readFileSync(inputFile).toString();
+
+  // Compare generated schema to the known "good" schema validated by https://www.jsonschemavalidator.net
+  const standardSchema = JSON.parse(fs.readFileSync('sample/petstore-simple-schema.json'));
+  const generatedSchema = await api.ytoj(input, {
+    id: 'https://github.com/tromgy/swagger-yaml-to-json-schema',
+    indent: 8,
+  });
+
+  t.deepEqual(generatedSchema, standardSchema, 'Generated schema should be the same as known "good" schema.');
+});
+
+// #endregion API tests
