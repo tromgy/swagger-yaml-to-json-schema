@@ -523,4 +523,38 @@ test('API Happy Path', async (t) => {
   t.deepEqual(generatedSchema, standardSchema, 'Generated schema should be the same as known "good" schema.');
 });
 
+test('API Happy Path AsyncAPI', async (t) => {
+  t.plan(1);
+
+  const inputFile = 'sample/asyncapi.yaml';
+
+  const input = fs.readFileSync(inputFile).toString();
+
+  // Compare generated schema to the known "good" schema validated by https://www.jsonschemavalidator.net
+  const standardSchema = JSON.parse(fs.readFileSync('sample/asyncapi.json'));
+  const generatedSchema = await api.ytoj(input, {
+    id: 'https://github.com/tromgy/swagger-yaml-to-json-schema',
+    indent: 8
+  });
+  t.deepEqual(generatedSchema, standardSchema, 'Generated schema should be the same as known "good" schema.');
+});
+
+
+test('API Happy Path AsyncAPI resolve refs', async (t) => {
+  t.plan(1);
+
+  const inputFile = 'sample/asyncapi_ref.yaml';
+
+  const input = fs.readFileSync(inputFile).toString();
+
+  // Compare generated schema to the known "good" schema validated by https://www.jsonschemavalidator.net
+  const standardSchema = JSON.parse(fs.readFileSync('sample/asyncapi_ref.json'));
+  const generatedSchema = await api.ytoj(input, {
+    id: 'https://github.com/tromgy/swagger-yaml-to-json-schema',
+    indent: 8,
+    resolveRefs: true
+  });
+  t.deepEqual(generatedSchema, standardSchema, 'Generated schema should be the same as known "good" schema.');
+});
+
 // #endregion API tests
