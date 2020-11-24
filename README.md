@@ -10,7 +10,7 @@
 
 [![Known Vulnerabilities](https://snyk.io/test/github/tromgy/swagger-yaml-to-json-schema/badge.svg?targetFile=package.json)](https://snyk.io/test/github/tromgy/swagger-yaml-to-json-schema?targetFile=package.json)
 
-This tool can be used to generate the JSON schema from a Swagger version 2 or 3 (OpenAPI) or AsyncAPI 2 YAML file.
+This tool can be used to generate the JSON schema from a Swagger version 2 or 3 (OpenAPI) or AsyncAPI 2  YAML file.
 
 ## Pre-requisites
 
@@ -34,9 +34,9 @@ or install it locally in your project:
 
 ## Usage
 
-### API - New 💥
+### API
 
-With the version 2.0 release, the functionality is also available as an API. To use it, `import` or `require` this package,
+The functionality is also available as an API. To use it, `import` or `require` this package,
 and then just call the `ytoj` function. Here is an example:
 
 ```JavaScript
