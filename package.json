@@ -1,6 +1,6 @@
 {
   "name": "ytoj",
-  "version": "2.0.1",
+  "version": "3.0",
   "description": "Generates JSON schema from Swagger/Open API YAML specifications",
   "main": "ytoj",
   "scripts": {
