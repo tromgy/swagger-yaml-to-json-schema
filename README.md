@@ -14,9 +14,9 @@ This tool can be used to generate the JSON schema from a Swagger version 2 or 3 
 
 ## Pre-requisites
 
-Node.js version 7.0 (in theory) or newer. Tested with 8.12.0, 10.13.0, 10.14.1, and 13.11.0
+Node.js version 7.0 (in theory) or newer. Tested with 8.12.0, 10.13.0, 10.14.1, 13.11.0, and 14.15.1
 
-**npm** version 6.1.0 or newer. Tested with 6.1.0, 6.4.1, and 6.14.7
+**npm** version 6.1.0 or newer. Tested with 6.1.0, 6.4.1, 6.14.7, and 6.14.8
 
 ## Installation
 
@@ -34,47 +34,6 @@ or install it locally in your project:
 
 ## Usage
 
-### API
-
-The functionality is also available as an API. To use it, `import` or `require` this package,
-and then just call the `ytoj` function. Here is an example:
-
-```JavaScript
-const { ytoj } = require('ytoj');
-
-async function convertSwagger(input) {
-  try {
-    const schema = await ytoj(input, { id: 'http://example.com/my-swagger', resolveRefs: true });
-
-    console.log(JSON.stringify(schema, null, 2));
-  } catch (e) {
-    console.log(e.message);
-  }
-}
-```
-
-#### Syntax
-
-```JavaScript
-const schemaObj = await ytoj(yamlString, options);
-```
-
-**yamlString**
-
-> A `String` that contains some Swagger/OpenAPI/AsyncAPI YAML specification.
-
-**options**
-
-> An optional `Object` that may supply configuration parameters (all optional):
-
-- `schema` - The URI defining the (meta-)schema for the generated JSON schema. Defaults to draft-07 of JSON schema: [`'http://json-schema.org/draft-07/schema#'`]('http://json-schema.org').
-- `id` - The URI defining the instance of the generated schema. If specified, it is expected to be something that identifies your application/project/organization.
-- `resolveRefs` - Specifies whether to resolve `$ref`s in the schema. Defaults to `false`.
-- `additionalProperties` - Specifies whether the genereated schema allows `additionalProperties` in JSON instances. Defaults to `false`.
-
-The function returns a `Promise<Object>`, where the `Object` represents the JSON schema corresponding to the input Swagger/OpenAPI specification.
-Note that the function is `async`, and so it must be called with `await` within a `try` block or with `.then().catch()`. It throws
-in case of invalid input or options.
 
 ### CLI
 
@@ -117,7 +76,7 @@ Save these settings in ytoj.json (y)? y
 
 If you answer yes to the last question this information will be saved in the configuration file called **ytoj.json**, so the next time the tool is run it can read it from there and will _not_ ask for it again. This way you can incorporate it in a build process.
 
-If you want to go back to interactive the mode, just delete **ytoj.json**
+If you want to go back to the interactive mode, just delete **ytoj.json**
 
 ## Configuration parameters
 
@@ -128,3 +87,45 @@ If you want to go back to interactive the mode, just delete **ytoj.json**
 - Resolve **\$refs**: Specifies whether to resolve `$ref`s in the schema. Defaults to "no".
 - **additionalProperties**: Specifies whether the genereated schema allows `additionalProperties` in JSON instances. Defaults to "no".
 - **Indent size**: Formatting indent for the output JSON file. Default is 2 (spaces).
+
+### API
+
+The functionality is also available as an API. To use it, `import` or `require` this package,
+and then just call the `ytoj` function. Here is an example:
+
+```JavaScript
+const { ytoj } = require('ytoj');
+
+async function convertSwagger(input) {
+  try {
+    const schema = await ytoj(input, { id: 'http://example.com/my-swagger', resolveRefs: true });
+
+    console.log(JSON.stringify(schema, null, 2));
+  } catch (e) {
+    console.log(e.message);
+  }
+}
+```
+
+#### Syntax
+
+```JavaScript
+const schemaObj = await ytoj(yamlString, options);
+```
+
+**yamlString**
+
+> A `String` that contains some Swagger/OpenAPI/AsyncAPI YAML specification.
+
+**options**
+
+> An optional `Object` that may supply configuration parameters (all optional):
+
+- `schema` - The URI defining the (meta-)schema for the generated JSON schema. Defaults to draft-07 of JSON schema: [`'http://json-schema.org/draft-07/schema#'`]('http://json-schema.org').
+- `id` - The URI defining the instance of the generated schema. If specified, it is expected to be something that identifies your application/project/organization.
+- `resolveRefs` - Specifies whether to resolve `$ref`s in the schema. Defaults to `false`.
+- `additionalProperties` - Specifies whether the genereated schema allows `additionalProperties` in JSON instances. Defaults to `false`.
+
+The function returns a `Promise<Object>`, where the `Object` represents the JSON schema corresponding to the input Swagger/OpenAPI specification.
+Note that the function is `async`, and so it must be called with `await` within a `try` block or with `.then().catch()`. It throws
+in case of invalid input or options.
