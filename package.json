@@ -4,7 +4,7 @@
   "description": "Generates JSON schema from Swagger/Open API YAML specifications",
   "main": "ytoj",
   "scripts": {
-    "lint": "eslint bin/*.js && eslint test/*.js",
+    "lint": "eslint .",
     "tape": "tape test/tests.js | colortape",
     "test": "npm run lint && npm run tape",
     "build": "npm ci && npm run test",
