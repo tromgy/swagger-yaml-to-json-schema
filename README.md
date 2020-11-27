@@ -43,7 +43,7 @@ The first time you run the tool:
     ytoj
 ```
 
-or (for local installation)
+or (if not installed globally)
 
 ```Shell
     npx ytoj
