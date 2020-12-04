@@ -39,7 +39,7 @@
     "js-yaml": "^3.13.1",
     "json-schema-ref-parser": "^6.0.2",
     "lodash": "^4.17.20",
-    "promptly": "^3.0.3"
+    "promptly": "^3.2.0"
   },
   "devDependencies": {
     "colortape": "^0.1.2",
