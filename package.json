@@ -44,7 +44,7 @@
   "devDependencies": {
     "colortape": "^0.1.2",
     "eslint": "^6.2.2",
-    "snyk": "^1.425.3",
+    "snyk": "^1.425.4",
     "tape": "^4.9.1",
     "tape-catch": "^1.0.6"
   },
