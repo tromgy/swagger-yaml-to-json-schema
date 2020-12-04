@@ -44,8 +44,8 @@
   "devDependencies": {
     "colortape": "^0.1.2",
     "eslint": "^6.8.0",
-    "snyk": "^1.316.1",
-    "tape": "^4.9.1",
+    "snyk": "^1.425.3",
+    "tape": "^4.13.3",
     "tape-catch": "^1.0.6"
   },
   "bin": {
