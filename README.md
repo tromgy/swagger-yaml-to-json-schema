@@ -34,7 +34,6 @@ or install it locally in your project:
 
 ## Usage
 
-
 ### CLI
 
 The first time you run the tool:
