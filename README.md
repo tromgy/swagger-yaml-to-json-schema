@@ -41,7 +41,7 @@ or install it locally in your project:
 The tool now can be run by specifying all parameters on the command line instead of interactively or from the configuration file. Run
 
 ```Shell
-  ytoj --help
+    ytoj --help
 ```
 
 or (if not installed globally)
