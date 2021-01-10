@@ -1,6 +1,6 @@
 {
   "name": "ytoj",
-  "version": "3.0.4",
+  "version": "4.0.0",
   "description": "Generates JSON schema from Swagger/Open API YAML specifications",
   "main": "ytoj",
   "scripts": {
@@ -11,12 +11,6 @@
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect",
     "start": "node ./bin/ytoj"
-  },
-  "remarkConfig": {
-    "plugins": [
-      "remark-preset-lint-recommended",
-      "lint-fenced-code-flag"
-    ]
   },
   "repository": {
     "type": "git",
@@ -36,6 +30,7 @@
   "homepage": "https://github.com/tromgy/swagger-yaml-to-json-schema#readme",
   "dependencies": {
     "colors": "^1.4.0",
+    "commander": "^6.2.1",
     "js-yaml": "^3.14.1",
     "json-schema-ref-parser": "^6.1.0",
     "lodash": "^4.17.20",

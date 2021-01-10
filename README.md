@@ -16,7 +16,7 @@ This tool can be used to generate the JSON schema from a Swagger version 2 or 3 
 
 Node.js version 7.0 (in theory) or newer. Tested with 8.12.0, 10.13.0, 10.14.1, 13.11.0, and 14.15.1
 
-**npm** version 6.1.0 or newer. Tested with 6.1.0, 6.4.1, 6.14.7, and 6.14.8
+**npm** version 6.1.0 or newer. Tested with 6.1.0, 6.4.1, 6.14.7, 6.14.8, and 6.14.10
 
 ## Installation
 
@@ -34,7 +34,44 @@ or install it locally in your project:
 
 ## Usage
 
-### CLI
+## CLI
+
+### Command line parameters - new 💥 in version 4!
+
+The tool now can be run by specifying all parameters on the command line instead of interactively or from the configuration file. Run
+
+```Shell
+  ytoj --help
+```
+
+or (if not installed globally)
+
+```Shell
+    npx ytoj --help
+```
+
+To see all avaialble parameters:
+
+```Text
+  -i, --input <file path>      YAML input file (required)
+  -o, --output <file path>     JSON schema output file (required)
+  -s, --schema <url>           $schema (default http://json-schema.org/draft-07/schema#)
+  -d, --id <url>               $id
+  -r, --resolve-refs           resolve $refs in the schema
+  -a, --additional-properties  allow additionalProperties in the schema
+  -t, --indent <number>        indent size in the output JSON file (default 2)
+  -c, --config <file path>     use settings from this file
+  --save-settings              save parameters to the configuration file and exit
+  -h, --help                   display help for command
+```
+
+ Note that the `-c, --config` parameter can be used three ways:
+
+ - If it is the only parameter given, and the specified configuration file exists, the tool will use that configuration.
+ - If it is the only parameter, and the specfied file _does not_ exist, the tool will proceed to the interactive mode (see below) and use the specfied file to _save_ the configuration entered by the user.
+ - If it is used with the `--save-settings` parameter, all parameters given on the command line will be saved in this configuration file, and the tool will exit.
+
+### Interactive mode
 
 The first time you run the tool:
 
@@ -51,7 +88,9 @@ or (if not installed globally)
 the tool will run interactively collecting some information:
 
 ```Text
-Generate JSON schema from Swagger or OpenAPI or AsyncAPI YAML document.
+Generate JSON schema from Swagger, OpenAPI, or AsyncAPI YAML document.
+
+Version 4.0.0
 
 Swagger YAML file:  sample/petstore-simple.yaml
 Output JSON schema:  schema/petstore-simple.json
@@ -77,7 +116,7 @@ If you answer yes to the last question this information will be saved in the con
 
 If you want to go back to the interactive mode, just delete **ytoj.json**
 
-## Configuration parameters
+### Configuration parameters
 
 - Input: the path to the YAML file containing Swagger specification.
 - Output: file containing JSON schema based on Swagger specification.
@@ -87,7 +126,7 @@ If you want to go back to the interactive mode, just delete **ytoj.json**
 - **additionalProperties**: Specifies whether the genereated schema allows `additionalProperties` in JSON instances. Defaults to "no".
 - **Indent size**: Formatting indent for the output JSON file. Default is 2 (spaces).
 
-### API
+## API
 
 The functionality is also available as an API. To use it, `import` or `require` this package,
 and then just call the `ytoj` function. Here is an example:
