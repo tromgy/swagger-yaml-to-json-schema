@@ -145,7 +145,7 @@ async function convertSwagger(input) {
 }
 ```
 
-#### Syntax
+### Syntax
 
 ```JavaScript
 const schemaObj = await ytoj(yamlString, options);
