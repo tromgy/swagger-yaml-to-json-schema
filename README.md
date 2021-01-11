@@ -1,6 +1,6 @@
 # swagger-yaml-to-json-schema (ytoj)
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4dcd37137a0e44a7b3f3933491b04385)](https://app.codacy.com/app/tromgy/swagger-yaml-to-json-schema?utm_source=github.com&utm_medium=referral&utm_content=tromgy/swagger-yaml-to-json-schema&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a05fd0d37d7a4e44a6e4a726b44332f5)](https://www.codacy.com/gh/tromgy/swagger-yaml-to-json-schema/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tromgy/swagger-yaml-to-json-schema&amp;utm_campaign=Badge_Grade)
 
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/tromgy/swagger-yaml-to-json-schema.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/tromgy/swagger-yaml-to-json-schema/alerts/)
 
