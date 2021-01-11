@@ -379,8 +379,8 @@ test('Complete command line', (t) => {
   );
 });
 
-test('Save the command line parameters in the configuration file', (t) => {
-  t.plan(4);
+test('Save the command line parameters in the configuration file - default', (t) => {
+  t.plan(2);
 
   const config = {
     yaml: 'sample/petstore-simple.yaml',
@@ -409,8 +409,6 @@ test('Save the command line parameters in the configuration file', (t) => {
     '--save-settings',
   ];
 
-  // Scenario 1: saving from the command line to the default config file
-
   // Start our app as a child process
   cp.execFile('node', args, (error, _, childErr) => {
     if (error) {
@@ -422,12 +420,45 @@ test('Save the command line parameters in the configuration file', (t) => {
     const savedConfig = JSON.parse(fs.readFileSync(configFile));
 
     t.deepEqual(savedConfig, config, 'Saved configuration should match given command line parameters');
-  });
 
-  // Scenario 2: Saving from the command line to a custom config file
+    teardown(configuration);
+  });
+});
+
+test('Save the command line parameters in the configuration file - custom', (t) => {
+  t.plan(2);
+
+  const config = {
+    yaml: 'sample/petstore-simple.yaml',
+    json: 'sample/petstore-simple.json',
+    schema: 'http://json-schema.org/draft-07/schema#',
+    id: 'opc.tcp://my-opc-server:58100',
+    resolveRefs: true,
+    additionalProperties: true,
+    indent: 5,
+  };
+
+  const args = [
+    appCmd,
+    '--input',
+    config.yaml,
+    '--output',
+    config.json,
+    '--schema',
+    config.schema,
+    '--id',
+    config.id,
+    config.resolveRefs && '--resolve-refs',
+    config.additionalProperties && '--additional-properties',
+    '--indent',
+    config.indent.toString(10),
+    '--save-settings',
+    '-c',
+    customConfigFile,
+  ];
 
   // Start our app as a child process
-  cp.execFile('node', [...args, '-c', customConfigFile], (error, _, childErr) => {
+  cp.execFile('node', args, (error, _, childErr) => {
     if (error) {
       throw error; // Something really unexpected happened
     }
