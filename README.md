@@ -8,7 +8,7 @@ This tool can be used to generate the JSON schema from a Swagger version 2 or 3 
 
 Node.js version 7.0 (in theory) or newer. Tested with 8.12.0, 10.13.0, 10.14.1, 13.11.0, and 14.15.1
 
-**npm** version 6.1.0 or newer. Tested with 6.1.0, 6.4.1, 6.14.7, 6.14.8, and 6.14.10
+**npm** version 6.1.0 or newer. Tested with 6.1.0, 6.4.1, 6.14.7, 6.14.8, 6.14.10, and 7.21.0
 
 ## Installation
 
@@ -45,7 +45,7 @@ the tool will run interactively collecting some information:
 ```Text
 Generate JSON schema from Swagger, OpenAPI, or AsyncAPI YAML document.
 
-Version 4.0.1
+Version 4.0.4
 
 Swagger YAML file:  sample/petstore-simple.yaml
 Output JSON schema:  schema/petstore-simple.json
