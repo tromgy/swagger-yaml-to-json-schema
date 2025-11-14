@@ -31,15 +31,15 @@
   "dependencies": {
     "colors": "^1.4.0",
     "commander": "^6.2.1",
-    "js-yaml": "^3.14.1",
-    "json-schema-ref-parser": "^6.1.0",
+    "js-yaml": "^4.1.1",
+    "json-schema-ref-parser": "^9.0.9",
     "lodash": "^4.17.21",
     "promptly": "^3.2.0"
   },
   "devDependencies": {
     "colortape": "^0.1.2",
-    "eslint": "^6.8.0",
-    "snyk": "^1.677.0",
+    "eslint": "^9.0.0",
+    "snyk": "^1.996.0",
     "tape": "^4.14.0",
     "tape-catch": "^1.0.6"
   },
